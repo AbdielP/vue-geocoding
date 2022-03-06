@@ -1,39 +1,68 @@
 <template>
-    <div class="container col-md-4 mt-3">
-        <div class="input-group input-group-sm">
-            <span class="input-group-text">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                </svg>
-            </span>
-            <input type="text" class="form-control input" placeholder="Search" aria-label="Search" aria-describedby="Search">
-            <button type="button" class="btn btn-dark btn-sm">
-                <img class="img__position" src="../assets/location-crosshairs-solid.svg" alt="My location">
-            </button>
+    <div class="container mt-3">
+        <div class="col-md-4">
+            <div class="input-group input-group-sm">
+                <input @input="search" v-model="searchQuery" type="text" class="form-control input" placeholder="Search" aria-label="Search" aria-describedby="Search">
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    This is some text within a card body.
+                </div>
+            </div>
         </div>
 
-        <!-- NEXT DIV HERE -->
+         <div class="col-md-4">
+             <button type="button" class="btn btn-dark btn-sm">
+                <img class="img__position" src="../assets/location-crosshairs-solid.svg" alt="My location">
+            </button>
+         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
-    name: 'MapFeatures'
+    name: 'MapFeatures',
+    props: ['coords'],
+    data () {
+        return {
+            searchData: null,
+            searchQuery: null,
+            queryTimeOut: null
+        }
+    },
+    methods: {
+        search: function () {
+            this.queryTimeOut = null
+            this.queryTimeOut = setTimeout( async () => {
+                if(this.searchQuery !== '') {
+                    const params = new URLSearchParams({
+                        fuzzyMatch: true,
+                        language: 'en',
+                        limit: 10,
+                        proximity: this.coords ? `${this.coords.lng}, ${this.coords.lat}` : '0,0'
+                    })
+                    const getData = await axios.get(`http://localhost:3000/api/search/${this.searchQuery}?${params}`)
+                    this.searchData = getData.data.features  
+                    console.log(this.searchData)
+                }
+            }, 700);
+        }
+    }
 }
 </script>
 
 <style scoped>
 .container {
-    /* padding: 0; */
-    /* margin: 1.8em 3.8em 0; */
     z-index: 100;
     background: none;
     position: absolute;
 }
 
-.input {
+/* .input {
     margin-right: .8em;
-}
+} */
 
 .img__position {
     width: 14px;

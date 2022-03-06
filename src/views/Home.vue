@@ -1,7 +1,7 @@
 <template>
   <div class="main__container">
     <Navbar />
-    <MapFeatures />
+    <MapFeatures :coords="coords" />
     <div id="map" class="map"></div>
   </div>
 </template>
