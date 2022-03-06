@@ -1,7 +1,7 @@
 <template>
   <div class="main__container">
     <Navbar />
-    <MapFeatures :coords="coords" />
+    <MapFeatures :coords="coords" @plotResult="plotResult"/>
     <div id="map" class="map"></div>
   </div>
 </template>
@@ -20,7 +20,8 @@ export default {
   data () {
     return {
       coords: null, // User actual coordinates
-      geoMarker: null // marker for user position
+      geoMarker: null, // marker for user position
+      resultMarker: null // search result marker
     }
   },
   methods: {
@@ -62,6 +63,13 @@ export default {
       this.geoMarker = leaflet.marker([this.coords.lat, this.coords.lng], {
         icon: customMarker,
       }).addTo(map);
+    },
+    plotResult: function (coords) {
+      if (this.resultMarker) {
+        map.removeLayer(this.resultMarker) // It receive 'geometry' object to remove it from map layer
+      }
+      this.resultMarker = leaflet.marker([coords.coordinates[1], coords.coordinates[0]]).addTo(map);
+      map.setView([coords.coordinates[1], coords.coordinates[0]], 16);
     }
   },
   mounted () {
@@ -77,7 +85,7 @@ export default {
 }
 
 .map {
-  z-index: 0;
+  z-index: 1;
   width: 100%;
   height: calc(100% - 56px);
 }

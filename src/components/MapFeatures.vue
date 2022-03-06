@@ -26,11 +26,11 @@
       </div>
     </div>
     <!-- CARD RESULTS -->
-    <div class="row align-items-star mt-1">
+    <div class="row mt-1">
       <div class="col-10 col-md-5">
         <div v-if="searchQuery" class="card d-flex justify-content-center p-2">
           <LoadingSpinner v-if="!searchData" />
-          <div class="d-flex align-items-center p-1 div__results" v-for="(result, index) in searchData" :key="index">
+          <div @click="selectResult(result)" class="d-flex align-items-center p-1 div__results" v-for="(result, index) in searchData" :key="index">
             <img class="img__marker" src="../assets/location-dot-solid.svg" alt="Location">
             <p class="small">{{result.place_name_en}}.</p>
           </div>
@@ -54,6 +54,7 @@ export default {
       searchData: null,
       searchQuery: null,
       queryTimeOut: null,
+      selectedResult: null
     };
   },
   methods: {
@@ -74,17 +75,20 @@ export default {
             `http://localhost:3000/api/search/${this.searchQuery}?${params}`
           );
           this.searchData = getData.data.features;
-          console.log(this.searchData);
         }
-      }, 700);
+      }, 800);
     },
+    selectResult: function (result) {
+        this.selectedResult = result
+        this.$emit('plotResult', result.geometry)
+    }
   },
 };
 </script>
 
 <style scoped>
 .container {
-  z-index: 100;
+  z-index: 10;
   background: none;
   position: absolute;
 }
