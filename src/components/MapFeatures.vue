@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row align-items-start mt-3">
-      <div class="col-10 col-md-4">
+      <div class="col-10 col-md-5">
         <div class="input-group input-group-sm">
           <input
             @input="search"
@@ -14,6 +14,7 @@
           />
         </div>
       </div>
+      <!-- BUTTON USER LOCATION -->
       <div class="col-1 col__padding">
         <button type="button" class="btn btn-dark btn-sm">
           <img
@@ -24,10 +25,15 @@
         </button>
       </div>
     </div>
+    <!-- CARD RESULTS -->
     <div class="row align-items-star mt-1">
-      <div class="col-10 col-md-4">
-        <div class="card">
-          <div class="card-body">This is some text within a card body.</div>
+      <div class="col-10 col-md-5">
+        <div class="card p-2">
+          <LoadingSpinner v-if="!searchData" />
+          <div class="d-flex align-items-center p-1 div__results" v-for="(result, index) in searchData" :key="index">
+            <img class="img__marker" src="../assets/location-dot-solid.svg" alt="Location">
+            <p class="small">{{result.place_name_en}}.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -35,10 +41,14 @@
 </template>
 
 <script>
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import axios from "axios";
 export default {
   name: "MapFeatures",
   props: ["coords"],
+  components: {
+    LoadingSpinner,
+  },
   data() {
     return {
       searchData: null,
@@ -48,7 +58,8 @@ export default {
   },
   methods: {
     search: function () {
-      this.queryTimeOut = null;
+      clearTimeout(this.queryTimeOut);
+      this.searchData = null;
       this.queryTimeOut = setTimeout(async () => {
         if (this.searchQuery !== "") {
           const params = new URLSearchParams({
@@ -87,5 +98,28 @@ export default {
 
 .col__padding {
   padding-left: 0;
+}
+
+.img__marker {
+    margin-right: .4em;
+    width: 1em;
+    height: 1em;
+}
+
+.card {
+    max-height: 80%;
+    overflow: scroll;
+}
+
+.div__results {
+    cursor: pointer;
+}.div__results:hover,
+.div__results:focus {
+    background: #F2F2F2;
+}
+
+.small {
+    font-size: 12px;
+    margin: 0;
 }
 </style>
