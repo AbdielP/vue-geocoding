@@ -1,17 +1,20 @@
 <template>
   <div class="main__container">
     <Navbar />
+    <MapFeatures />
     <div id="map" class="map"></div>
   </div>
 </template>
 
 <script>
 var map = null
+import MapFeatures from '@/components/MapFeatures'
 import Navbar from '@/components/Navbar'
 import leaflet from "leaflet"
 export default {
   name: 'Home',
   components: {
+    MapFeatures,
     Navbar
   },
   data () {
@@ -48,6 +51,7 @@ export default {
     },
     initMap: function () {
       map = leaflet.map("map").setView([this.coords.lat, this.coords.lng], 15);
+      map.zoomControl.setPosition('bottomleft')
       leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
@@ -73,6 +77,7 @@ export default {
 }
 
 .map {
+  z-index: 0;
   width: 100%;
   height: calc(100% - 56px);
 }
