@@ -28,7 +28,7 @@
     <!-- CARD RESULTS -->
     <div class="row align-items-star mt-1">
       <div class="col-10 col-md-5">
-        <div class="card p-2">
+        <div v-if="searchQuery" class="card d-flex justify-content-center p-2">
           <LoadingSpinner v-if="!searchData" />
           <div class="d-flex align-items-center p-1 div__results" v-for="(result, index) in searchData" :key="index">
             <img class="img__marker" src="../assets/location-dot-solid.svg" alt="Location">
@@ -107,7 +107,8 @@ export default {
 }
 
 .card {
-    max-height: 80%;
+    min-height: 75px;
+    max-height: 75%;
     overflow: scroll;
 }
 
