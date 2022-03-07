@@ -1,43 +1,32 @@
 <template>
-  <div class="container">
-    <div class="row align-items-start mt-3">
-      <div class="col-10 col-md-5">
-        <div class="input-group input-group-sm">
-          <input
-            @input="search"
-            v-model="searchQuery"
-            type="text"
-            class="form-control"
-            placeholder="Search"
-            aria-label="Search"
-            aria-describedby="Search"
-          />
+    <div class="main d-flex flex-column mx-4 mt-2">
+        <div class="div__row d-flex justify-content-between">
+            <div class="input-group input-group-sm div--width">
+                <input
+                    @input="search"
+                    v-model="searchQuery"
+                    type="text"
+                    class="form-control"
+                    placeholder="Search"
+                    aria-label="Search"
+                    aria-describedby="Search"
+                />
+            </div>
+            <button type="button" class="btn btn-dark btn-sm">
+                <img class="img__position" src="../assets/location-crosshairs-solid.svg" alt="My location"/>
+            </button>
         </div>
-      </div>
-      <!-- BUTTON USER LOCATION -->
-      <div class="col-1 col__padding">
-        <button type="button" class="btn btn-dark btn-sm">
-          <img
-            class="img__position"
-            src="../assets/location-crosshairs-solid.svg"
-            alt="My location"
-          />
-        </button>
-      </div>
-    </div>
-    <!-- CARD RESULTS -->
-    <div class="row mt-1">
-      <div class="col-10 col-md-5">
-        <div v-if="searchQuery" class="card d-flex justify-content-center p-2">
-          <LoadingSpinner v-if="!searchData" />
-          <div @click="selectResult(result)" class="d-flex align-items-center p-1 div__results" v-for="(result, index) in searchData" :key="index">
-            <img class="img__marker" src="../assets/location-dot-solid.svg" alt="Location">
-            <p class="small">{{result.place_name_en}}.</p>
-          </div>
+
+        <div v-if="searchQuery" class="div__row div__container mt-2">
+            <div class="card d-flex justify-content-center p-2">
+                <LoadingSpinner v-if="!searchData" />
+                <div @click="selectResult(result)" class="d-flex align-items-center p-1 div__results" v-for="(result, index) in searchData" :key="index">
+                    <img class="img__marker" src="../assets/location-dot-solid.svg" alt="Location">
+                    <p class="small">{{result.place_name_en}}.</p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -87,10 +76,18 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  z-index: 10;
-  background: none;
-  position: absolute;
+.main {
+    z-index: 10;
+    position: absolute;
+} 
+
+.div__row {
+    min-width: 150px;
+    width: 400px;
+}
+
+.div--width {
+    width: 90.5%;
 }
 
 .img__position {
@@ -100,20 +97,16 @@ export default {
     contrast(101%);
 }
 
-.col__padding {
-  padding-left: 0;
-}
-
 .img__marker {
     margin-right: .4em;
     width: 1em;
     height: 1em;
 }
 
-.card {
+.div__container { 
     min-height: 75px;
-    max-height: 75%;
     overflow: scroll;
+    height: 300px;
 }
 
 .div__results {
