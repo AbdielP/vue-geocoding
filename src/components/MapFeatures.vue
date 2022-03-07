@@ -16,7 +16,7 @@
                 <img class="img__position" src="../assets/location-crosshairs-solid.svg" alt="My location"/>
             </button>
         </div>
-
+        
         <div v-if="searchQuery" class="div__row div__container mt-2">
             <div class="card d-flex justify-content-center p-2">
                 <LoadingSpinner v-if="!searchData" />
@@ -105,8 +105,11 @@ export default {
 
 .div__container { 
     min-height: 75px;
-    overflow: scroll;
     height: 300px;
+}
+
+.card {
+  overflow: scroll;
 }
 
 .div__results {
