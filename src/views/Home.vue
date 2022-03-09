@@ -1,7 +1,7 @@
 <template>
   <div class="main__container">
     <Navbar />
-    <MapFeatures v-on:plotResult="plotResult" @toggleSearchResults="toggleSearchResults" :coords="coords" :searchResults="searchResults"/>
+    <MapFeatures v-on:plotResult="plotResult" @removeResult="removeResult" @toggleSearchResults="toggleSearchResults" :coords="coords" :searchResults="searchResults"/>
     <div id="map" class="map"></div>
   </div>
 </template>
@@ -30,7 +30,6 @@ export default {
       if(this.coords) { // not sure what is this for
         this.coords = null
         sessionStorage.removeItem('coords')
-        console.log('emm.. que es esto?')
         return map.removeLayer(this.geoMarker)
       }
       if (sessionStorage.getItem('coords')) {
@@ -81,6 +80,9 @@ export default {
     },
     closeSearchResults: function () {
       this.searchResults = null
+    },
+    removeResult: function () {
+      map.removeLayer(this.resultMarker)
     }
   },
   mounted () {

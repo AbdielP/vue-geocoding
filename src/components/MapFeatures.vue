@@ -16,13 +16,29 @@
                 <img class="img__position" src="../assets/location-crosshairs-solid.svg" alt="My location"/>
             </button>
         </div>
-        
+        <!-- RESULTS -->
         <div v-if="searchQuery && searchResults" class="div__row div__container mt-2">
-            <div class="card d-flex justify-content-center p-2">
+            <div class="card overflow-scroll d-flex justify-content-center p-2">
                 <LoadingSpinner v-if="!searchData" />
                 <div @click="selectResult(result)" class="d-flex align-items-center p-1 div__results" v-for="(result, index) in searchData" :key="index">
                     <img class="img__marker" src="../assets/location-dot-solid.svg" alt="Location">
                     <p class="small">{{result.place_name_en}}.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SELECTED RESULT -->
+        <div v-if="selectedResult" class="mt-2">
+            <div class="card d-flex justify-content-center p-2">
+                <div class="d-flex flex-column p-1">
+                  <button v-on:click="removeResult" type="button" aria-label="close" class="btn__close align-self-end p-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                    </svg>
+                  </button>
+                  <h1 class="lead">{{selectedResult.text}}.</h1>
+                  <p class="small">{{selectedResult.properties.address}}, {{selectedResult.city}}, {{selectedResult.state}}.</p>
+                  <p class="small">{{selectedResult.properties.category}}.</p>
                 </div>
             </div>
         </div>
@@ -71,6 +87,10 @@ export default {
     selectResult: function (result) {
         this.selectedResult = result
         this.$emit('plotResult', result.geometry)
+    },
+    removeResult: function () {
+        this.selectedResult = null
+        this.$emit('removeResult')
     }
   },
 };
@@ -109,7 +129,7 @@ export default {
     height: 300px;
 }
 
-.card {
+.overflow-scroll {
   overflow: scroll;
 }
 
@@ -118,6 +138,11 @@ export default {
 }.div__results:hover,
 .div__results:focus {
     background: #F2F2F2;
+}
+
+.btn__close {
+  border: none;
+  background: none;
 }
 
 .small {
