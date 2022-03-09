@@ -2,7 +2,7 @@
     <div class="main d-flex flex-column mx-4 mt-2">
         <div class="div__row d-flex justify-content-between">
             <div class="input-group input-group-sm div--width">
-                <input
+                <input @focus="$emit('toggleSearchResults')"
                     @input="search"
                     v-model="searchQuery"
                     type="text"
@@ -17,7 +17,7 @@
             </button>
         </div>
         
-        <div v-if="searchQuery" class="div__row div__container mt-2">
+        <div v-if="searchQuery && searchResults" class="div__row div__container mt-2">
             <div class="card d-flex justify-content-center p-2">
                 <LoadingSpinner v-if="!searchData" />
                 <div @click="selectResult(result)" class="d-flex align-items-center p-1 div__results" v-for="(result, index) in searchData" :key="index">
@@ -27,6 +27,7 @@
             </div>
         </div>
     </div>
+
 </template>
 
 <script>
@@ -34,7 +35,7 @@ import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import axios from "axios";
 export default {
   name: "MapFeatures",
-  props: ["coords"],
+  props: ["coords", "searchResults"],
   components: {
     LoadingSpinner,
   },

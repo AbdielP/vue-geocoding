@@ -1,7 +1,7 @@
 <template>
   <div class="main__container">
     <Navbar />
-    <MapFeatures :coords="coords" @plotResult="plotResult"/>
+    <MapFeatures v-on:plotResult="plotResult" @toggleSearchResults="toggleSearchResults" :coords="coords" :searchResults="searchResults"/>
     <div id="map" class="map"></div>
   </div>
 </template>
@@ -21,7 +21,8 @@ export default {
     return {
       coords: null, // User actual coordinates
       geoMarker: null, // marker for user position
-      resultMarker: null // search result marker
+      resultMarker: null, // search result marker
+      searchResults: null
     }
   },
   methods: {
@@ -70,7 +71,14 @@ export default {
       }
       this.resultMarker = leaflet.marker([coords.coordinates[1], coords.coordinates[0]]).addTo(map);
       map.setView([coords.coordinates[1], coords.coordinates[0]], 16);
-    }
+      this.closeSearchResults();
+    },
+    toggleSearchResults: function () {
+      this.searchResults = !this.searchResults
+    },
+    closeSearchResults: function () {
+      this.searchResults = null
+    },
   },
   mounted () {
     this.getGeolocation();
