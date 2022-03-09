@@ -9,6 +9,7 @@
 </template>
 
 <script>
+// https://salesforce.stackexchange.com/questions/180977/leaflet-error-when-zoom-after-close-popup-in-lightning-component
 var map = null
 import MapFeatures from '@/components/MapFeatures'
 import Navbar from '@/components/Navbar'
@@ -30,7 +31,7 @@ export default {
   },
   methods: {
     initMap: function () {
-      map = leaflet.map("map").setView([51.505, -0.09], 15);
+      map = leaflet.map("map",{ zoomControl: true, zoom:1, zoomAnimation:false, fadeAnimation:true, markerZoomAnimation:true }).setView([51.505, -0.09], 15);
       map.zoomControl.setPosition('bottomleft')
       leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
