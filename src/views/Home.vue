@@ -1,7 +1,6 @@
 <template>
   <div class="main__container">
     <Navbar />
-     <!-- @getGeolocation="getGeolocation" ESTE ES EL ERROR... -->
     <MapFeatures v-on:plotResult="plotResult" @getGeoLocation="getGeoLocation" @removeResult="removeResult" @toggleSearchResults="toggleSearchResults" 
     :coords="coords" :searchResults="searchResults" :fetchCoords="fetchCoords"/>
     <div id="map" class="map"></div>
@@ -63,7 +62,7 @@ export default {
       }
       sessionStorage.setItem('coords', JSON.stringify(setSessionCoords))
       this.coords = setSessionCoords;
-      this.plotGeoLocation(this.coords); //???
+      this.plotGeoLocation(this.coords);
     },
     getLocError: function (err) {
       this.fetchCoords = null

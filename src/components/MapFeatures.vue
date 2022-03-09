@@ -1,6 +1,7 @@
 <template>
-    <div class="main d-flex flex-column mx-4 mt-2">
-        <div class="div__row d-flex justify-content-between">
+    <div class="main col-9 col-md-4 col-xl-3 d-flex flex-column mx-4 mt-2">
+      <!-- SEARCH -->
+        <div class="d-flex justify-content-between">
             <div class="input-group input-group-sm div--width">
                 <input @focus="$emit('toggleSearchResults')"
                     @input="search"
@@ -18,8 +19,8 @@
             </button>
         </div>
         <!-- RESULTS -->
-        <div v-if="searchQuery && searchResults" class="div__row div__container mt-2">
-            <div class="card overflow-scroll d-flex justify-content-center p-2">
+        <div v-if="searchQuery && searchResults" class="overflow-scroll div__container mt-2">
+            <div class="card d-flex justify-content-center p-2">
                 <LoadingSpinner v-if="!searchData" />
                 <div @click="selectResult(result)" class="d-flex align-items-center p-1 div__results" v-for="(result, index) in searchData" :key="index">
                     <img class="img__marker" src="../assets/location-dot-solid.svg" alt="Location">
@@ -104,11 +105,6 @@ export default {
     position: absolute;
 } 
 
-.div__row {
-    min-width: 150px;
-    width: 400px;
-}
-
 .div--width {
     width: 90.5%;
 }
@@ -128,7 +124,7 @@ export default {
 
 .div__container { 
     min-height: 75px;
-    height: 300px;
+    max-height: 200px;
 }
 
 .overflow-scroll {
