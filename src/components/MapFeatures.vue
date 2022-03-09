@@ -13,7 +13,7 @@
                 />
             </div>
             <!-- Geolocation -->
-            <button @click="$emit('getGeolocation')" type="button" class="btn btn-sm" :class="{'btn-dark': coords, 'btn-light' : fetchCoords}">
+            <button @click="$emit('getGeoLocation')" type="button" class="btn btn-sm" :class="{'btn-dark': coords, 'btn-secondary' : !coords}">
                 <img class="img__position" src="../assets/location-crosshairs-solid.svg" alt="My location"/>
             </button>
         </div>

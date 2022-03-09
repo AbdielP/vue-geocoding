@@ -2,7 +2,7 @@
   <div class="main__container">
     <Navbar />
      <!-- @getGeolocation="getGeolocation" ESTE ES EL ERROR... -->
-    <MapFeatures v-on:plotResult="plotResult" @getGeolocation="getGeolocation" @removeResult="removeResult" @toggleSearchResults="toggleSearchResults" 
+    <MapFeatures v-on:plotResult="plotResult" @getGeoLocation="getGeoLocation" @removeResult="removeResult" @toggleSearchResults="toggleSearchResults" 
     :coords="coords" :searchResults="searchResults" :fetchCoords="fetchCoords"/>
     <div id="map" class="map"></div>
   </div>
@@ -29,15 +29,27 @@ export default {
     }
   },
   methods: {
-    getGeolocation: function () {
-      if(this.coords) { // esto es para remover el marker con el botón...
+    initMap: function () {
+      map = leaflet.map("map").setView([51.505, -0.09], 15);
+      map.zoomControl.setPosition('bottomleft')
+      leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+      map.on('moveend', () => {
+        this.closeSearchResults()
+      })
+      this.getGeoLocation();
+    },
+    getGeoLocation: function () {
+      if(this.coords) {
         this.coords = null
         sessionStorage.removeItem('coords')
         return map.removeLayer(this.geoMarker)
       }
       if (sessionStorage.getItem('coords')) {
         this.coords = JSON.parse(sessionStorage.getItem('coords'));
-        return this.initMap(); // ESTE ES EL ERROR, SE INICIALIZA 2 VECES..
+        this.plotGeoLocation(this.coords)
+        return
       }
       this.fetchCoords = true
       navigator.geolocation.getCurrentPosition(this.setCoords, this.getLocError)
@@ -50,28 +62,21 @@ export default {
       }
       sessionStorage.setItem('coords', JSON.stringify(setSessionCoords))
       this.coords = setSessionCoords;
-      this.initMap();
+      this.plotGeoLocation(this.coords); //???
     },
     getLocError: function (err) {
       this.fetchCoords = null
       console.log(err)
     },
-    initMap: function () {
-      map = leaflet.map("map").setView([this.coords.lat, this.coords.lng], 15);
-      map.zoomControl.setPosition('bottomleft')
-      leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
+    plotGeoLocation: function (coords) {
       const customMarker = leaflet.icon({
         iconUrl: require("../assets/map-marker-red.svg"),
         iconSize: [35, 35],
       });
-      this.geoMarker = leaflet.marker([this.coords.lat, this.coords.lng], {
+      this.geoMarker = leaflet.marker([coords.lat, coords.lng], {
         icon: customMarker,
       }).addTo(map)
-      map.on('moveend', () => {
-        this.closeSearchResults()
-      })
+      map.setView([coords.lat, coords.lng], 15);
     },
     plotResult: function (coords) {
       if (this.resultMarker) {
@@ -92,7 +97,7 @@ export default {
     }
   },
   mounted () {
-    this.getGeolocation();
+    this.initMap();
   }
 }
 </script>
