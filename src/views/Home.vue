@@ -63,7 +63,10 @@ export default {
       });
       this.geoMarker = leaflet.marker([this.coords.lat, this.coords.lng], {
         icon: customMarker,
-      }).addTo(map);
+      }).addTo(map)
+      map.on('moveend', () => {
+        this.closeSearchResults()
+      })
     },
     plotResult: function (coords) {
       if (this.resultMarker) {
@@ -78,7 +81,7 @@ export default {
     },
     closeSearchResults: function () {
       this.searchResults = null
-    },
+    }
   },
   mounted () {
     this.getGeolocation();
