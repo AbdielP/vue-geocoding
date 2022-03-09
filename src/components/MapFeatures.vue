@@ -12,7 +12,8 @@
                     aria-describedby="Search"
                 />
             </div>
-            <button type="button" class="btn btn-dark btn-sm">
+            <!-- Geolocation -->
+            <button @click="$emit('getGeolocation')" type="button" class="btn btn-sm" :class="{'btn-dark': coords, 'btn-light' : fetchCoords}">
                 <img class="img__position" src="../assets/location-crosshairs-solid.svg" alt="My location"/>
             </button>
         </div>
@@ -51,7 +52,7 @@ import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import axios from "axios";
 export default {
   name: "MapFeatures",
-  props: ["coords", "searchResults"],
+  props: ['coords', 'fetchCoords', 'searchResults'],
   components: {
     LoadingSpinner,
   },

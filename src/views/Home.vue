@@ -1,7 +1,9 @@
 <template>
   <div class="main__container">
     <Navbar />
-    <MapFeatures v-on:plotResult="plotResult" @removeResult="removeResult" @toggleSearchResults="toggleSearchResults" :coords="coords" :searchResults="searchResults"/>
+     <!-- @getGeolocation="getGeolocation" ESTE ES EL ERROR... -->
+    <MapFeatures v-on:plotResult="plotResult" @getGeolocation="getGeolocation" @removeResult="removeResult" @toggleSearchResults="toggleSearchResults" 
+    :coords="coords" :searchResults="searchResults" :fetchCoords="fetchCoords"/>
     <div id="map" class="map"></div>
   </div>
 </template>
@@ -21,24 +23,27 @@ export default {
     return {
       coords: null, // User actual coordinates
       geoMarker: null, // marker for user position
+      fetchCoords: null,
       resultMarker: null, // search result marker
       searchResults: null
     }
   },
   methods: {
     getGeolocation: function () {
-      if(this.coords) { // not sure what is this for
+      if(this.coords) { // esto es para remover el marker con el botón...
         this.coords = null
         sessionStorage.removeItem('coords')
         return map.removeLayer(this.geoMarker)
       }
       if (sessionStorage.getItem('coords')) {
         this.coords = JSON.parse(sessionStorage.getItem('coords'));
-        return this.initMap();
+        return this.initMap(); // ESTE ES EL ERROR, SE INICIALIZA 2 VECES..
       }
+      this.fetchCoords = true
       navigator.geolocation.getCurrentPosition(this.setCoords, this.getLocError)
     },
     setCoords: function (pos) {
+      this.fetchCoords = null
       const setSessionCoords = {
         lat: pos.coords.latitude,
         lng: pos.coords.longitude
@@ -48,6 +53,7 @@ export default {
       this.initMap();
     },
     getLocError: function (err) {
+      this.fetchCoords = null
       console.log(err)
     },
     initMap: function () {
