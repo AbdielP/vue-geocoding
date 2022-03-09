@@ -79,7 +79,8 @@ export default {
               : "0,0",
           });
           const getData = await axios.get(
-            `http://localhost:3000/api/search/${this.searchQuery}?${params}`
+            // `http://localhost:3000/api/geocoding/search/${this.searchQuery}?${params}`
+            `https://backend-node-server.herokuapp.com/api/geocoding/search/${this.searchQuery}?${params}`
           );
           this.searchData = getData.data.features;
         }
